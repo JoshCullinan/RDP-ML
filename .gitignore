@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#My Ignores
+Santa_Original.jar
+muscle3.8.31_i86win32.exe
+neutral.xml
+Other
