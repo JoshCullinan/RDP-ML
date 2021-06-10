@@ -1,1 +1,0 @@
-TotalEvents	MatchedEvents	RecombinantCorrectlyIdentified	TotalRecombinants	MatchedRecombinants

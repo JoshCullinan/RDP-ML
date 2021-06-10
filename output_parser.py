@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import ast
 from collections import defaultdict
+from pathlib import Path
+import os
 
 class rdpParser():
 	rdpcsv_fileName = ""
@@ -129,7 +131,7 @@ class rdpParser():
 							self.total_recombinants += len(recombinants)
 							self.matched_recombinants += len(recombinants.intersection(seq_set))
 
-							#true_recombinants lists all matched events (i+1 = event number in RDP output),
+							#true_recombinants lists all matched events (y = index of event in RDP output),
 							#as well as which of the 3 candidate sequence sets are the true recombinant
 							self.true_recombinants.append([y, index])							
 							break
@@ -137,8 +139,18 @@ class rdpParser():
 	def export_ml_data(self):			
 
 		self.rdp_df = self.rdp_df.drop(['Event', 'StartBP', 'EndBP', 'ISeqs(A)'], axis=1)
+		file_name = "output/ml_input.txt"
+		file_path = Path(file_name)
 
-		with open("output/ml_input.txt", "a") as f:
+		#if file doesnt exist yet, create it and write header
+		if (not (file_path.exists())):	
+			os.makedirs(os.path.dirname(file_name), exist_ok=True)		
+			with open(file_name, "w+") as g:
+				header = ['Recombinant'] + self.rdp_df.columns.to_list()
+				g.write('\t'.join(str(s) for s in header) + '\n')
+
+
+		with open(file_name, "a") as f:
 			for y, r in self.true_recombinants:
 				out = [self.rdp_df.iloc[y+s].tolist() for s in range(3)]	
 				zipped = zip(out[0], out[1], out[2])
@@ -179,7 +191,18 @@ class rdpParser():
 		out.append(self.total_recombinants)
 		out.append(self.matched_recombinants)
 
-		with open("output/rdp_accuracy.txt", "a") as file:
+		#check if file exists, if not, create file + header
+		file_name = "output/rdp_accuracy.txt"
+		file_path = Path(file_name)
+
+		#if file doesnt exist yet, create it and write header
+		if (not (file_path.exists())):
+			os.makedirs(os.path.dirname(file_name), exist_ok=True)			
+			with open(file_name, "w+") as g:
+				header = ['TotalEvents', 'MatchedEvents', 'RecombinantsCorrectlyChosen', 'TotalRecombinants', 'MatchedRecombinants']
+				g.write('\t'.join(str(s) for s in header) + '\n')
+
+		with open(file_name, "a") as file:
 			file.write('\t'.join(str(y) for y in out) + '\n')		
 
 #Josh please help here
