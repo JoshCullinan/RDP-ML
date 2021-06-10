@@ -62,9 +62,13 @@ class rdpParser():
 	def add_extra_events(self):
 		#Checking this dictionary for events in >50% of sequences. For these we will create a new event which is identical, 
 		#except present in the complement set of sequences.
-		max_event_num = max(self.inv_seqmap_dict.keys())
-		counter = 0
 
+		if (len(self.inv_seqmap_dict.keys()) > 0):
+			max_event_num = max(self.inv_seqmap_dict.keys())
+		else:
+			max_event_num = 0
+		
+		counter = 0
 		for key, value in self.inv_seqmap_dict.items():
 			if (len(value) >= self.samplesize/2):
 				counter += 1
@@ -84,7 +88,10 @@ class rdpParser():
 
 	def compare_rdp_with_sim(self):
 		
-		num_of_events = self.rdp_df.at[self.rdp_df.index[-1], 'Event']	
+		if (len(self.rdp_df) > 0):
+			num_of_events = self.rdp_df.at[self.rdp_df.index[-1], 'Event']
+		else:
+			num_of_events = 0	
 	
 		for i in range(num_of_events):
 			#collect breakpoints from rdp output
