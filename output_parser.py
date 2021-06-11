@@ -1,6 +1,7 @@
 import pandas as pd 
 import numpy as np
 import ast
+import argparse
 from collections import defaultdict
 from pathlib import Path
 import os
@@ -73,10 +74,10 @@ class rdpParser():
 			if (len(value) >= self.samplesize/2):
 				counter += 1
 				#adding new event to events dictionary
-				self.events_dict[max_event_num+counter] = events_dict[key]
+				self.events_dict[max_event_num+counter] = self.events_dict[key]
 
 				#adding new event to event:sequence dictionary
-				complemented_sequences = set(range(1,samplesize+1)) - value	
+				complemented_sequences = set(range(1,self.samplesize+1)) - value	
 				for seq in complemented_sequences:
 					self.inv_seqmap_dict[max_event_num+counter].add(seq)
 
@@ -212,19 +213,35 @@ class rdpParser():
 		with open(file_name, "a") as file:
 			file.write('\t'.join(str(y) for y in out) + '\n')		
 
-#Josh please help here
+
+#Parsers command line input to get file names. Pipeline.bat currently inputs filenames. Can be done manually as well.
 def getFileNames():
-	return
+	#Define parser
+	parser = argparse.ArgumentParser(description='Parse Recombination Information from SantaSim')
+	
+	#Add arguments for command line
+	parser.add_argument('--rdpcsv', dest = 'rdpcsv_fileName', type=str, help='RDP Recombination Identifying Stats File', required=True)
+	parser.add_argument('--seq', dest = 'seqmap_fileName', type=str,  help='Sequence Events file from Simulation', required=True)
+	parser.add_argument('--rec', dest = 'events_fileName', type=str,  help='Recombinaton events file from Simulation', required=True)
+	parser.add_argument('--IDTests', dest = 'rdp_recIDTests_fileName', type=str,  help='RDP ID Tests file', required=True)
+	
+	#Parse Events
+	args = parser.parse_args()
+
+	#Returns parsed file names. Could be done in a 'nicer' manner but it works for now.
+	return(args.rdpcsv_fileName, args.seqmap_fileName, args.events_fileName, args.rdp_recIDTests_fileName)
 			
 if __name__=='__main__':
-	filenames = getFileNames()
-	rdpcsv_fileName = "alignment_1.faRecombIdentifyStats.csv"
-	seqmap_fileName = "sequence_events_map.txt"
-	events_fileName = "recombination_events.txt"
-	rdp_recIDTests_fileName = "alignment_1.faRecIDTests.csv"
+	rdpcsv_fileName,seqmap_fileName, events_fileName, rdp_recIDTests_fileName = getFileNames()
 
 	parser = rdpParser(rdpcsv_fileName, seqmap_fileName, events_fileName)
 	parser.compare_rdp_with_sim()
 	parser.export_ml_data()
 	parser.export_rdp_accuracy_data(rdp_recIDTests_fileName)
 
+
+### If needed for testing or if parser fails ###
+	# rdpcsv_fileName = "alignment_1.faRecombIdentifyStats.csv"
+	# seqmap_fileName = "sequence_events_map_1.txt"
+	# events_fileName = "recombination_events_1.txt"
+	# rdp_recIDTests_fileName = "alignment_1.faRecIDTests.csv"

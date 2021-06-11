@@ -133,3 +133,7 @@ Santa_Original.jar
 muscle3.8.31_i86win32.exe
 neutral.xml
 Other
+alignment_*
+sequence_events_map_*
+recombination_events_*
+Parse_Events.py
