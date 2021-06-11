@@ -1,19 +1,20 @@
 @REM Set EPOCH to the number of outputs required
-set /A EPOCH=3
+set /A EPOCH=1
 
 call conda activate RDP
 
-@REM muscle3.8.31_i86win32.exe -in alignment_1.fa -out MuscleAligned.afa
-FOR /L %%A IN (2,1,%EPOCH%) DO (
+FOR /L %%A IN (1,1,%EPOCH%) DO (
 
     java -jar santa.jar low_recomb_rate.xml
 
-    Ren "alignment_1.fa" "alignment_%%A.fa"
+    Ren "alignment_0.fa" "alignment_%%A.fa"
     Ren "recombination_events.txt" "recombination_events_%%A.txt"
-    Ren "sequence_events_map.txt" "sequence_events_map_%%A.txt"
+    Ren "sequence_events_map.txt" "sequence_events_map_%%A.txt" 
     
-    python Parse_Events.py --f sequence_events_map_%%A.txt
+    RDP5CL.exe -f alignment_%%A.fa -ds
 
-    RDP5CL.exe -f alignment_%%A.fa REM -am -o -nor
-
+    python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv" 
 )
+
+@REM Run the command below to test the output parser from your terminal/CMD, assuming that you've run the above code and have some RDP files to parse.  
+    @REM python output_parser.py --rdpcsv "alignment_1.faRecombIdentifyStats.csv" --seq "sequence_events_map_1.txt" --rec "recombination_events_1.txt" --IDTests "alignment_1.faRecIDTests.csv" 
