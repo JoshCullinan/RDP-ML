@@ -136,4 +136,5 @@ Other
 alignment_*
 sequence_events_map_*
 recombination_events_*
-Parse_Events.py
+Parse_Events*
+Josh_parser.py
