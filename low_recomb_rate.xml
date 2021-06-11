@@ -76,7 +76,7 @@
                 <!-- Sample genotypes at certain times in FASTA Format -->
                 <sampler>
                     <atFrequency>5000</atFrequency>
-                    <fileName>alignment_%r.fa</fileName>
+                    <fileName>alignment_0.fa</fileName>
                     <alignment>
                         <sampleSize>100</sampleSize>
                         <format>FASTA</format>
