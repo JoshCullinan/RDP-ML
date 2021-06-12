@@ -69,22 +69,22 @@ class rdpParser():
 		else:
 			max_event_num = 0
 		
-		counter = 0
+		counter = 0	
+
 		for key, value in self.inv_seqmap_dict.items():
 			if (len(value) >= self.samplesize/2):
 				counter += 1
-				#adding new event to events dictionary
-				self.events_dict[max_event_num+counter] = self.events_dict[key]
 
-				#adding new event to event:sequence dictionary
-				complemented_sequences = set(range(1,self.samplesize+1)) - value	
-				for seq in complemented_sequences:
-					self.inv_seqmap_dict[max_event_num+counter].add(seq)
+				#adding new event to events_map dictionary
+				complemented_sequences = set(range(1, self.samplesize+1)) - value				
+				self.events_map[max_event_num+counter] = (self.events_dict[key], complemented_sequences)				
 
-		self.added_events_count = counter;
+		self.added_events_count = counter
 
+		#now adding rest of events to events_map
 		for k,v in self.events_dict.items():
-			self.events_map[k] = [v, self.inv_seqmap_dict[k]]
+			self.events_map[k] = (v, self.inv_seqmap_dict[k])
+
 
 
 	def compare_rdp_with_sim(self):
@@ -238,10 +238,3 @@ if __name__=='__main__':
 	parser.compare_rdp_with_sim()
 	parser.export_ml_data()
 	parser.export_rdp_accuracy_data(rdp_recIDTests_fileName)
-
-
-### If needed for testing or if parser fails ###
-	# rdpcsv_fileName = "alignment_1.faRecombIdentifyStats.csv"
-	# seqmap_fileName = "sequence_events_map_1.txt"
-	# events_fileName = "recombination_events_1.txt"
-	# rdp_recIDTests_fileName = "alignment_1.faRecIDTests.csv"
