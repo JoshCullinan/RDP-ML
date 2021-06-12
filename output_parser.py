@@ -68,20 +68,19 @@ class rdpParser():
 		else:
 			max_event_num = 0
 		
-		counter = 0
+		counter = 0	
+
 		for key, value in self.inv_seqmap_dict.items():
 			if (len(value) >= self.samplesize/2):
 				counter += 1
-				#adding new event to events dictionary
-				self.events_dict[max_event_num+counter] = events_dict[key]
 
-				#adding new event to event:sequence dictionary
-				complemented_sequences = set(range(1,samplesize+1)) - value	
-				for seq in complemented_sequences:
-					self.inv_seqmap_dict[max_event_num+counter].add(seq)
+				#adding new event to events_map dictionary
+				complemented_sequences = set(range(1, self.samplesize+1)) - value				
+				self.events_map[max_event_num+counter] = (self.events_dict[key], complemented_sequences)				
 
-		self.added_events_count = counter;
+		self.added_events_count = counter
 
+		#now adding rest of events to events_map
 		for k,v in self.events_dict.items():
 			self.events_map[k] = [v, self.inv_seqmap_dict[k]]
 
