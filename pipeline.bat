@@ -1,6 +1,6 @@
 @echo OFF
 @REM Set EPOCH to the number of outputs required
-set /A EPOCH=1
+set /A EPOCH=50
 
 @REM Creating a "unique" identifier based on the current time for the alignment files. If you know how to do it better please do - this code is crap. I don't know BAT.
 SET T=%date%-%time%
@@ -22,8 +22,8 @@ FOR /L %%A IN (1,1,%EPOCH%) DO (
     @REM Run RDP scan on the simulation
     RDP\RDP5CL.exe -f ../alignment_%%A.fa -ds
 
-    @REM Parse the output files
-    python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv" 
+    @REM Parse the output files if they exist else make note
+    if exist alignment_1.faRecIDTests.csv (python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv") else (echo "RDP did not detect any recombination this run")
 
     @REM
     md "output\alignments" > nul 
