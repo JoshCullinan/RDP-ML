@@ -23,21 +23,17 @@ FOR /L %%A IN (1,1,%EPOCH%) DO (
     RDP\RDP5CL.exe -f ../alignment_%%A.fa -ds
 
     @REM Parse the output files if they exist else make note
-    if exist alignment_1.faRecIDTests.csv (python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv") else (echo "RDP did not detect any recombination this run")
+    if exist alignment_%%A.faRecIDTests.csv (python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv") else (echo "RDP did not detect any recombination this run")
 
     @REM
-    md "output\alignments" > nul 
-    md "output\alignments\%T%" > nul
+    md "output\alignments" > nul 2>&1
+    md "output\alignments\%T%" > nul 2>&1
 
-    @REM If we decide to delete these file we can just uncomment this line. 
-    @REM del "alignment_%%A.faRecombIdentifyStats.csv", "alignment_%%A.faRecIDTests.csv", "alignment_%%A.fa.csv", "alignment_%%A.fa.rdp5"
+    del "alignment_%%A.faRecombIdentifyStats.csv", "alignment_%%A.faRecIDTests.csv", "alignment_%%A.fa.csv", "alignment_%%A.fa.rdp5"
 
     @REM Move all of the output files generated into the output folder.
-    move "*.csv" "..\RDP-ML\output\alignments\%T%" > nul
-    move "*.txt" "..\RDP-ML\output\alignments\%T%" > nul
-    move "*.fa" "..\RDP-ML\output\alignments\%T%" > nul
-    move "*.rdp5" "..\RDP-ML\output\alignments\%T%" > nul
+    move "*.txt" "..\RDP-ML\output\alignments\%T%" > nul 2>&1
+    move "*.fa" "..\RDP-ML\output\alignments\%T%" > nul 2>&1
 )
 
-@REM Run the command below to test the output parser from your terminal/CMD, assuming that you've run the above code and have some RDP files to parse.  
-    @REM python output_parser.py --rdpcsv "alignment_1.faRecombIdentifyStats.csv" --seq "sequence_events_map_1.txt" --rec "recombination_events_1.txt" --IDTests "alignment_1.faRecIDTests.csv"
+del RDP\RDP5Redolist*
