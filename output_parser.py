@@ -238,10 +238,3 @@ if __name__=='__main__':
 	parser.compare_rdp_with_sim()
 	parser.export_ml_data()
 	parser.export_rdp_accuracy_data(rdp_recIDTests_fileName)
-
-
-### If needed for testing or if parser fails ###
-	# rdpcsv_fileName = "alignment_1.faRecombIdentifyStats.csv"
-	# seqmap_fileName = "sequence_events_map_1.txt"
-	# events_fileName = "recombination_events_1.txt"
-	# rdp_recIDTests_fileName = "alignment_1.faRecIDTests.csv"
