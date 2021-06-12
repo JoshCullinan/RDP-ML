@@ -138,3 +138,16 @@ sequence_events_map_*
 recombination_events_*
 Parse_Events*
 Josh_parser.py
+
+#Files to ignore
+output
+alignments
+
+#RDP Ignores
+3seqTable
+BinProbs
+LastSave.rdp5
+PairsScores
+RDP5FSSRDP
+RDP5Redolist*
+SCF
