@@ -23,7 +23,7 @@ FOR /L %%A IN (1,1,%EPOCH%) DO (
     echo Starting EPOCH: %%A out of %EPOCH%
 
     @REM Run simulation.
-    java -jar santa.jar low_recomb_rate.xml 1>>out.txt 2>>&1
+    java -jar santa.jar low_recomb_rate.xml 1>>out_%%A.txt 2>>&1
 
     @REM Housekeeping to allow for easy file management.
     Ren "alignment_0.fa" "alignment_%%A.fa"
@@ -31,16 +31,17 @@ FOR /L %%A IN (1,1,%EPOCH%) DO (
     Ren "sequence_events_map.txt" "sequence_events_map_%%A.txt" 
     
     @REM Run RDP scan on the simulation
-    RDP\RDP5CL.exe -f ../alignment_%%A.fa -ds >>out.txt 2>>&1
+    RDP\RDP5CL.exe -f ../alignment_%%A.fa -ds >>out_%%A.txt 2>>&1
 
     @REM Parse the output files if they exist else make note
-    if exist alignment_%%A.faRecIDTests.csv (python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv") else (echo "RDP did not detect any recombination on run: %%A")
-
+    if exist alignment_%%A.faRecIDTests.csv (python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv") else (TIMEOUT /T 0.5)
+    if exist alignment_%%A.faRecIDTests.csv (python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv") else (echo RDP did not detect any recombination on run: %%A)
+    
     @REM
     md "output\alignments" >nul 2>&1
     md "output\alignments\%T%" >nul 2>&1
 
-    del "alignment_%%A.faRecombIdentifyStats.csv", "alignment_%%A.faRecIDTests.csv", "alignment_%%A.fa.csv", "alignment_%%A.fa.rdp5"
+    del "alignment_%%A.faRecombIdentifyStats.csv", "alignment_%%A.faRecIDTests.csv", "alignment_%%A.fa.csv", "alignment_%%A.fa.rdp5" >nul 2>&1 
 
     @REM Move all of the output files generated into the output folder.
     move "*.txt" "..\RDP-ML\output\alignments\%T%" >nul 2>&1
