@@ -109,7 +109,7 @@ class rdpParser():
 			start_bp = self.rdp_df.at[y, 'StartBP'] 
 			end_bp = self.rdp_df.at[y, 'EndBP']	
 			#3 sets of sequences for recombinant+parents triplet
-			seqs = [{int(j) for j in self.rdp_df.at[y+k, 'ISeqs(A)'].split('$')} for k in range(3)]
+			seqs = [{int(j) for j in str(self.rdp_df.at[y+k, 'ISeqs(A)']).split('$')} for k in range(3)]
 
 			#swapping bp if "wrong" way around (circular genome)
 			if end_bp < start_bp:
