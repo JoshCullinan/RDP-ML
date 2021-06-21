@@ -34,7 +34,6 @@ FOR /L %%A IN (1,1,%EPOCH%) DO (
     RDP\RDP5CL.exe -f ../alignment_%%A.fa -ds >>out_%%A.txt 2>>&1
 
     @REM Parse the output files if they exist else make note
-    if exist alignment_%%A.faRecIDTests.csv (python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv") else (TIMEOUT /T 1)
     if exist alignment_%%A.faRecIDTests.csv (python output_parser.py --rdpcsv "alignment_%%A.faRecombIdentifyStats.csv" --seq "sequence_events_map_%%A.txt" --rec "recombination_events_%%A.txt" --IDTests "alignment_%%A.faRecIDTests.csv") else (echo RDP did not detect any recombination on run: %%A)
     
     @REM
