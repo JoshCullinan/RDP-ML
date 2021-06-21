@@ -27,6 +27,7 @@ class rdpParser():
 	true_recombinants = []
 	total_recombinants = 0
 	matched_recombinants = 0	
+	total_rdp_events = 0
 	
 
 	def __init__(self, rdpf, seqmapf, eventsf):
@@ -91,6 +92,7 @@ class rdpParser():
 		
 		if (len(self.rdp_df) > 0):
 			num_of_events = self.rdp_df.at[self.rdp_df.index[-1], 'Event']
+			self.total_rdp_events = num_of_events
 		else:
 			num_of_events = 0	
 	
@@ -176,6 +178,7 @@ class rdpParser():
 		matched_events = len(self.true_recombinants)
 
 		out.append(total_event_number)
+		out.append(self.total_rdp_events)
 		out.append(matched_events)		
 
 		#of the matched recombinant events, in how many of the triplets was the recombinant correctly identified?
@@ -207,7 +210,7 @@ class rdpParser():
 		if (not (file_path.exists())):
 			os.makedirs(os.path.dirname(file_name), exist_ok=True)			
 			with open(file_name, "w+") as g:
-				header = ['TotalEvents', 'MatchedEvents', 'RecombinantsCorrectlyChosen', 'TotalRecombinants', 'MatchedRecombinants']
+				header = ['TotalTrueEvents', 'TotalRDPEvents', 'MatchedEvents', 'RecombinantsCorrectlyChosen', 'TotalRecombinants', 'MatchedRecombinants']
 				g.write('\t'.join(str(s) for s in header) + '\n')
 
 		with open(file_name, "a") as file:
