@@ -61,13 +61,13 @@
 	        <replicator>
 	            <recombinantReplicator>
 			<dualInfectionProbability>0.1</dualInfectionProbability>
-			<recombinationProbability>0.0015</recombinationProbability>
+			<recombinationProbability>0.006</recombinationProbability>
 		      </recombinantReplicator>
 	        </replicator>
 
             <epoch>
                 <name>epoch1</name>
-                <generationCount>5000</generationCount>
+                <generationCount>7500</generationCount>
             </epoch>
 
            
@@ -75,7 +75,7 @@
                 
                 <!-- Sample genotypes at certain times in FASTA Format -->
                 <sampler>
-                    <atFrequency>5000</atFrequency>
+                    <atFrequency>7500</atFrequency>
                     <fileName>alignment_0.fa</fileName>
                     <alignment>
                         <sampleSize>100</sampleSize>
